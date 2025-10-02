@@ -1,0 +1,22 @@
+pipeline {
+    agent any
+    stages {
+        stage('Build') {
+            steps {
+                sh 'touch sample_file.txt'
+            }
+        }
+        stage('Test') {
+            steps {
+                sh 'echo "Sample Text" > sample_file.txt'
+                sh 'cat sample_file.txt'
+            }
+        }
+    }
+
+    post {
+        always {
+            archiveArtifacts artifacts: 'sample_file.txt', fingerprint: true
+        }
+    }
+}

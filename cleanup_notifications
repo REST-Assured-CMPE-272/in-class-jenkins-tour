@@ -1,0 +1,19 @@
+pipeline {
+    agent any
+    stages {
+        stage('Test') {
+            steps {
+                sh 'echo "Dummy Failure to test email notification"'
+                sh 'exit 1'
+            }
+        }
+    }
+
+    post {
+        failure {
+        mail to: 'akshaynavani.masters@gmail.com',
+             subject: "Failed Pipeline: ${currentBuild.fullDisplayName}",
+             body: "Something is wrong with ${env.BUILD_URL}"
+    }
+    }
+}

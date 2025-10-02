@@ -1,0 +1,27 @@
+pipeline {
+    agent any
+    stages {
+        stage('Deploy - Staging') {
+            steps {
+                sh 'touch deploy_script.sh; echo "echo "Deploying in Staging Area"" > deploy_script.sh; chmod 755  deploy_script.sh;'
+            }
+        }
+
+        stage('Sanity check') {
+            steps {
+                input "Does the staging environment look ok?"
+            }
+        }
+            stage('Deploying') {
+            steps {
+                sh './deploy_script.sh'
+            }
+        }
+        stage('Deploy - Production') {
+            steps {
+                sh 'touch deploy_script_prod.sh; echo "echo "Deploying in Production Area"" > deploy_script_prod.sh; chmod 755  deploy_script_prod.sh'
+                sh './deploy_script_prod.sh'
+            }
+        }
+    }
+}
